@@ -3,6 +3,9 @@
 import { useCallback, useState, useEffect } from 'react';
 import TradePanel from './components/TradePanel';
 import { AppState } from '@/lib/types';
+import BalanceCard from './components/BalanceCard';
+import OpenOrdersList from './components/OpenOrdersList';
+import PositionsList from './components/PositionsList';
 
 export default function Home() {
   const [state, setState] = useState<AppState | null>(null);
@@ -27,6 +30,7 @@ export default function Home() {
     const id = setInterval(refresh, 5000); // polling is fine here
     return () => clearInterval(id);
   }, [refresh]);
+  
   return (
     <main className='mx-auto max-w-4xl px-5 pt-6 text-center'>
       <h1>Trade, but simpler</h1>
@@ -41,6 +45,12 @@ export default function Home() {
           <strong>Can&apos;t reach the exchange.</strong> {loadError}
         </div>
       )}
+      <BalanceCard
+        equity={state?.equity}
+        unrealizedPnl={state?.unrealizedPnl}
+        availableToTrade={state?.availableToTrade}
+        heldAsMargin={state?.heldAsMargin}
+      />
       <TradePanel markets={state?.markets ?? []} onPlaced={refresh} />
     </main>
   );

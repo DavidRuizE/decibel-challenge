@@ -1,15 +1,6 @@
+import { AccountOverview, MarketPrice, PerpMarket, UserOpenOrdersResponse, UserPosition,  } from '@decibeltrade/sdk';
 
-export type Market = {
-  market_addr: string;
-  market_name: string;
-  px_decimals: number;
-  sz_decimals: number;
-  tick_size: number;
-  lot_size: number;
-  min_size: number;
-  max_leverage: number;
-  mode: string;
-};
+export type Market = PerpMarket
 
 export type MarketSummary = { name: string; price: number };
 
@@ -42,3 +33,11 @@ export type AppState = {
   positions: Position[];
   openOrders: OpenOrder[];
 };
+
+export type AccountStateInputs = {
+  markets: Market[],
+  prices: MarketPrice[],
+  overview: AccountOverview,
+  positions: UserPosition[],
+  openOrders: UserOpenOrdersResponse,
+}
