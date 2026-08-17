@@ -30,12 +30,13 @@ export default function Home() {
     const id = setInterval(refresh, 5000); // polling is fine here
     return () => clearInterval(id);
   }, [refresh]);
-  
+
   return (
-    <main className='mx-auto max-w-4xl px-5 pt-6 text-center'>
+    <main className='mx-auto max-w-6xl px-5 pt-6 text-center'>
       <h1>Trade, but simpler</h1>
-      <h3>By Decibel</h3>
       <p>Practice money, trades on Aptos testnet.</p>
+      <br />
+
 
       {loadError && (
         <div
@@ -45,13 +46,21 @@ export default function Home() {
           <strong>Can&apos;t reach the exchange.</strong> {loadError}
         </div>
       )}
-      <BalanceCard
-        equity={state?.equity}
-        unrealizedPnl={state?.unrealizedPnl}
-        availableToTrade={state?.availableToTrade}
-        heldAsMargin={state?.heldAsMargin}
-      />
-      <TradePanel markets={state?.markets ?? []} onPlaced={refresh} />
+
+      <div className='lg:grid lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)] lg:items:start lg:gap-5'>
+        <div className='lg:sticky lg:top-6'>
+          <BalanceCard
+            equity={state?.equity}
+            unrealizedPnl={state?.unrealizedPnl}
+            availableToTrade={state?.availableToTrade}
+            heldAsMargin={state?.heldAsMargin}
+          />
+          <TradePanel markets={state?.markets ?? []} onPlaced={refresh} />
+        </div>
+        <div>
+          <PositionsList positions={state?.positions} />
+        </div>
+      </div>
     </main>
   );
 }
