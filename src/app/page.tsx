@@ -31,6 +31,15 @@ export default function Home() {
     return () => clearInterval(id);
   }, [refresh]);
 
+  async function cancel(orderId: string, marketName: string) {
+    await fetch('/api/cancel', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ orderId, marketName }),
+    });
+    refresh();
+  }
+
   return (
     <main className='mx-auto max-w-6xl px-5 pt-6 text-center'>
       <h1>Trade, but simpler</h1>
@@ -59,6 +68,7 @@ export default function Home() {
         </div>
         <div>
           <PositionsList positions={state?.positions} />
+          <OpenOrdersList orders={state?.openOrders} onCancel={cancel} />
         </div>
       </div>
     </main>
