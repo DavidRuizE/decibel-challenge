@@ -1,6 +1,6 @@
 import { money, signedMoney } from '@/lib/format';
 import Card from './Card';
-import { EXPLAINER, MUTED, TINY } from './ui';
+import { EXPLAINER, MUTED } from './ui';
 import { AppState } from '@/lib/types';
 
 export default function BalanceCard({ state }: { state: AppState | null }) {

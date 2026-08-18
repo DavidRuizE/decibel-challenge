@@ -1,5 +1,33 @@
 [
   {
+    "id": "sig_0aadd8a6",
+    "author": "Juan",
+    "marketName": "LIT/USD",
+    "isBuy": true,
+    "entryPrice": 2.3456,
+    "takeProfitPct": 5,
+    "stopLossPct": 2,
+    "holdHours": 7,
+    "takeProfitPrice": 2.46288,
+    "stopLossPrice": 2.2986880000000003,
+    "createdAt": "2026-08-18T09:20:38.650Z",
+    "expiresAt": "2026-08-18T16:20:38.650Z"
+  },
+  {
+    "id": "sig_def6f150",
+    "author": "Demo",
+    "marketName": "CHIP/USD",
+    "isBuy": false,
+    "entryPrice": 0.028797,
+    "takeProfitPct": 4,
+    "stopLossPct": 2,
+    "holdHours": 5,
+    "takeProfitPrice": 0.02764512,
+    "stopLossPrice": 0.02937294,
+    "createdAt": "2026-08-18T08:55:06.299Z",
+    "expiresAt": "2026-08-18T13:55:06.299Z"
+  },
+  {
     "id": "sig_e57a86bc",
     "author": "TESLA",
     "marketName": "TSLA/USD",

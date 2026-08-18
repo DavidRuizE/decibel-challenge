@@ -20,7 +20,7 @@ export function targetPrices(
     };
 }
 
-export function validateDraft(draft: SignalDraft): string | null {
+function validateDraft(draft: SignalDraft): string | null {
     if (!draft.author?.trim()) return 'Add your name so people know whose idea this is';
     if (!draft.marketName) return 'Pick a market';
     if (!Number.isFinite(draft.entryPrice) || draft.entryPrice <= 0) {

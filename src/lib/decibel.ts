@@ -9,7 +9,7 @@ const privateKey = process.env.API_WALLET_PRIVATE_KEY;
 if (!apiKey) throw new Error('Missing APTOS_API_KEY');
 if (!privateKey) throw new Error('Missing APTOS_API_KEY');
 
-export const account = new Ed25519Account({
+const account = new Ed25519Account({
   privateKey: new Ed25519PrivateKey(privateKey),
 });
 
@@ -22,4 +22,3 @@ export const decibelRead = new DecibelReadDex(TESTNET_CONFIG, {
   nodeApiKey: apiKey,
 });
 
-export const config = TESTNET_CONFIG;

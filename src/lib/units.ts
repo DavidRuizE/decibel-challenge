@@ -44,10 +44,6 @@ export function toChainSize(size: number, market: Market): number {
   return snap(toChain(size, market.sz_decimals), market.lot_size);
 }
 
-export function fromChainPrice(chainPrice: number, market: Market): number {
-  return fromChain(chainPrice, market.px_decimals);
-}
-
 export function fromChainSize(chainSize: number, market: Market): number {
   return fromChain(chainSize, market.sz_decimals);
 }

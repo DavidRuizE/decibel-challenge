@@ -9,8 +9,8 @@ import { type Market } from './types';
 
 
 export const SUBACCOUNT = process.env.DECIBEL_SUBACCOUNT_ADDR!;
-export const BUILDER_ADDR = padAddress(process.env.BUILDER_SUBACCOUNT_ADDR!);
-export const MAX_FEE_BPS = Number(process.env.BUILDER_MAX_FEE_BPS ?? 10);
+const BUILDER_ADDR = padAddress(process.env.BUILDER_SUBACCOUNT_ADDR!);
+const MAX_FEE_BPS = Number(process.env.BUILDER_MAX_FEE_BPS ?? 10);
 
 export const SLIPPAGE_PCT = 0.5;
 
@@ -26,7 +26,7 @@ export async function getMarket(marketName: string): Promise<Market> {
 
 const BPS_SCALE = 100;
 
-export async function approvedMaxFeeBps(): Promise<number | null>{
+async function approvedMaxFeeBps(): Promise<number | null>{
   const [approved] = await decibelWrite.aptos.view<[{ vec: string[] }]>({
     payload: {
       function: `${TESTNET_CONFIG.deployment.package}::builder_code_registry::get_approved_max_fee`,
@@ -37,7 +37,7 @@ export async function approvedMaxFeeBps(): Promise<number | null>{
   return raw === undefined ? null : Number(raw) / BPS_SCALE;
 }
 
-export async function ensureBuilderApproved(feeBps = MAX_FEE_BPS): Promise<number> {
+async function ensureBuilderApproved(feeBps = MAX_FEE_BPS): Promise<number> {
   const current = await approvedMaxFeeBps();
   if (current !== null && current >= feeBps) return current;
 
@@ -45,7 +45,7 @@ export async function ensureBuilderApproved(feeBps = MAX_FEE_BPS): Promise<numbe
   return (await approvedMaxFeeBps()) ?? 0;
 }
 
-export async function approveBuilder(maxFee = MAX_FEE_BPS) {
+async function approveBuilder(maxFee = MAX_FEE_BPS) {
     return decibelWrite.approveMaxBuilderFee({
         builderAddr: BUILDER_ADDR,
         maxFee,
