@@ -6,6 +6,7 @@ import { AppState } from '@/lib/types';
 import BalanceCard from './components/BalanceCard';
 import OpenOrdersList from './components/OpenOrdersList';
 import PositionsList from './components/PositionsList';
+import Link from 'next/link';
 
 export default function Home() {
   const [state, setState] = useState<AppState | null>(null);
@@ -46,6 +47,9 @@ export default function Home() {
       <p>Practice money, trades on Aptos testnet.</p>
       <br />
 
+      <Link className="my-3 inline-block text-sm text-accent hover:underline" href="/signals">
+        See trade ideas from other people →
+      </Link>
 
       {loadError && (
         <div

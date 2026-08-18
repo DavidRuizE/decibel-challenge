@@ -1,11 +1,10 @@
 import { assertAffordable, slippageBoundedPrice } from '@/lib/order-math';
 import { decibelRead } from '@/lib/decibel';
-import { getMarket, placeOrder, SUBACCOUNT } from '@/lib/orders';
+import { getMarket, placeOrder, SLIPPAGE_PCT, SUBACCOUNT } from '@/lib/orders';
 import { chainSizeToDollars, dollarsToChainSize, fromChainSize } from '@/lib/units';
 import { TimeInForce } from '@decibeltrade/sdk';
 import { NextResponse } from 'next/server';
 
-const SLIPPAGE_PCT = 0.5;
 
 export async function POST( req: Request ){
     let body;

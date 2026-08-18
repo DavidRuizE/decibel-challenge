@@ -10,6 +10,8 @@ export const SUBACCOUNT = process.env.DECIBEL_SUBACCOUNT_ADDR!;
 export const BUILDER_ADDR = padAddress(process.env.BUILDER_SUBACCOUNT_ADDR!);
 export const MAX_FEE_BPS = Number(process.env.BUILDER_MAX_FEE_BPS ?? 10);
 
+export const SLIPPAGE_PCT = 0.5;
+
 export async function getMarket(marketName: string): Promise<Market> {
   const markets = (await decibelRead.markets.getAll()) as Market[];
   const market = markets.find((m) => m.market_name === marketName);
