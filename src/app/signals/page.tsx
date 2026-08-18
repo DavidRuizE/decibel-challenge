@@ -61,6 +61,13 @@ export default function Signals() {
           ok: false,
           text: data.hint ? `${data.error} — ${data.hint}` : data.error,
         });
+      } else if (!data.filled) {
+        setNotice({
+          ok: false,
+          text: `Your order for ${friendly(data.marketName)} went in but nothing filled${
+            data.exitError ? ` (${data.exitError})` : ''
+          } — check the trading screen before betting again.`,
+        });
       } else {
         const exits = data.exitsSet
           ? ` It closes itself at ${money(data.takeProfitPrice)} to win, or ${money(

@@ -124,3 +124,44 @@ export async function setPositionExits({
 export async function cancelOrder(orderId: string | number, marketName: string) {
   return decibelWrite.cancelOrder({ orderId, marketName, subaccountAddr: SUBACCOUNT });
 }
+
+const FILL_POLL_MS = 300;
+const FILL_WAIT_MS = 8000;
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+export async function positionSize(market: Market): Promise<number> {
+  const positions = await decibelRead.userPositions.getByAddr({
+    subAddr: SUBACCOUNT,
+    marketAddr: market.market_addr,
+  });
+  return positions.find((p) => p.market === market.market_addr)?.size ?? 0;
+}
+
+export async function waitForFill({
+  market,
+  sizeBefore,
+  isBuy,
+  requestedSize,
+}: {
+  market: Market;
+  sizeBefore: number;
+  isBuy: boolean;
+  requestedSize: number;
+}): Promise<number | null> {
+  const deadline = Date.now() + FILL_WAIT_MS;
+  let settled: number | null = null;
+
+  while (Date.now() < deadline) {
+    await sleep(FILL_POLL_MS);
+    const size = await positionSize(market);
+
+    if (isBuy ? size <= sizeBefore : size >= sizeBefore) continue;
+
+    const filled = Math.abs(size - sizeBefore);
+    if (filled + 1e-9 >= requestedSize || size === settled) return size;
+    settled = size;
+  }
+
+  return settled;
+}

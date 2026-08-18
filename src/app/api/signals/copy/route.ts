@@ -1,7 +1,15 @@
 import { decibelRead } from '@/lib/decibel';
 import { statusFor } from '@/lib/errors';
 import { assertAffordable, slippageBoundedPrice } from '@/lib/order-math';
-import { getMarket, SUBACCOUNT, SLIPPAGE_PCT, placeOrder, setPositionExits } from '@/lib/orders';
+import {
+    getMarket,
+    SUBACCOUNT,
+    SLIPPAGE_PCT,
+    placeOrder,
+    positionSize,
+    setPositionExits,
+    waitForFill,
+} from '@/lib/orders';
 import { targetPrices } from '@/lib/signals';
 import { readSignals } from '@/lib/store';
 import { chainSizeToDollars, dollarsToChainSize, fromChainSize } from '@/lib/units';
@@ -51,10 +59,13 @@ export async function POST(req: Request){
             Number(market.max_leverage),
         );
 
+        const requestedSize = fromChainSize(chainSize, market);
+        const sizeBefore = await positionSize(market);
+
         const result = await placeOrder({
             market,
             price: slippageBoundedPrice(midPx, signal.isBuy, SLIPPAGE_PCT),
-            size: fromChainSize(chainSize, market),
+            size: requestedSize,
             isBuy: signal.isBuy,
             timeInForce: TimeInForce.ImmediateOrCancel,
         });
@@ -72,24 +83,40 @@ export async function POST(req: Request){
             signal.takeProfitPct,
             signal.stopLossPct,
         );
+        
+        const settledSize = await waitForFill({
+            market,
+            sizeBefore,
+            isBuy: signal.isBuy,
+            requestedSize,
+        });
 
         let exitsSet = false;
         let exitError: string | null = null;
-        try {
-        const tx = await setPositionExits({
-            market,
-            isLong: signal.isBuy,
-            size: fromChainSize(chainSize, market),
-            takeProfitPrice,
-            stopLossPrice,
-        });
-        exitsSet = tx.success;
-        } catch (e) {
-            exitError = e instanceof Error ? e.message : String(e);
+
+        if (settledSize === null) {
+            exitError = 'the order has not filled yet';
+        } else if (settledSize === 0) {
+            exitError = 'the fill closed your position flat, so there is nothing to protect';
+        } else {
+            try {
+            const tx = await setPositionExits({
+                market,
+                isLong: settledSize > 0,
+                size: Math.abs(settledSize),
+                takeProfitPrice,
+                stopLossPrice,
+            });
+            exitsSet = tx.success;
+            } catch (e) {
+                exitError = e instanceof Error ? e.message : String(e);
+            }
         }
 
         return NextResponse.json({
         copied: true,
+        filled: settledSize !== null && settledSize !== 0,
+        filledSize: settledSize === null ? 0 : Math.abs(settledSize - sizeBefore),
         transactionHash: result.transactionHash,
         marketName: signal.marketName,
         isBuy: signal.isBuy,
