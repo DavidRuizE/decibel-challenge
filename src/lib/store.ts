@@ -1,3 +1,5 @@
+import 'server-only'
+
 import path from 'node:path';
 import { Signal } from './types';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';

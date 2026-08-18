@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { TESTNET_CONFIG, TimeInForce } from '@decibeltrade/sdk';
 import { decibelRead, decibelWrite } from './decibel';
 import { assertFeeWithinBound, padAddress } from './order-math';
