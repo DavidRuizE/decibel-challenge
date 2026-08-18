@@ -1,4 +1,4 @@
-import { TimeInForce } from '@decibeltrade/sdk';
+import { TESTNET_CONFIG, TimeInForce } from '@decibeltrade/sdk';
 import { decibelRead, decibelWrite } from './decibel';
 import { assertFeeWithinBound, padAddress } from './order-math';
 import { toChainPrice, toChainSize} from './units';
@@ -20,6 +20,28 @@ export async function getMarket(marketName: string): Promise<Market> {
     throw new Error(`${marketName} is not open for trading (mode: ${market.mode})`);
   }
   return market;
+}
+
+const BPS_SCALE = 100;
+
+export async function approvedMaxFeeBps(): Promise<number | null>{
+  const [approved] = await decibelWrite.aptos.view<[{ vec: string[] }]>({
+    payload: {
+      function: `${TESTNET_CONFIG.deployment.package}::builder_code_registry::get_approved_max_fee`,
+      functionArguments: [SUBACCOUNT, BUILDER_ADDR],
+    },
+  });
+  const raw = approved?.vec?.[0];
+  return raw === undefined ? null : Number(raw) / BPS_SCALE;
+}
+
+export async function ensureBuilderApproved(feeBps = MAX_FEE_BPS) {
+  const current = await approvedMaxFeeBps();
+  if (current !== null && current >= feeBps) {
+    return { approvedNow: false, maxFeeBps: current };
+  }
+  const tx = await approveBuilder(feeBps);
+  return { approvedNow: true, maxFeeBps: feeBps, transactionHash: tx.hash };
 }
 
 export async function approveBuilder(maxFee = MAX_FEE_BPS) {
@@ -50,6 +72,7 @@ export async function placeOrder({
     isReduceOnly = false
 } : placesArgs) {
     assertFeeWithinBound(builderFee, MAX_FEE_BPS);
+    await ensureBuilderApproved(builderFee);
 
     return decibelWrite.placeOrder({
         marketName: market.market_name,
