@@ -7,7 +7,12 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    return NextResponse.json(await readSignals());
+    const now = Date.now();
+    const signals = (await readSignals()).map((s) => ({
+      ...s,
+      expired: Date.parse(s.expiresAt) <= now,
+    }));
+    return NextResponse.json(signals);
   } catch (error) {
     return NextResponse.json(
       { error: 'Could not read saved signals', hint: String(error) },

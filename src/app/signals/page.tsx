@@ -3,16 +3,16 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { friendly, money } from '@/lib/format';
-import type { Signal } from '@/lib/types';
+import type { SignalListItem } from '@/lib/types';
 import type { MarketSummary } from '@/lib/types';
 import AmountPicker from '../components/AmountPicker';
 import Card from '../components/Card';
 import Notice, { type NoticeState } from '../components/Notice';
-import SignalCard from '../components/SignalCard';
 import SignalForm from '../components/SignalForm';
+import SignalSection from '../components/SignalSection';
 
 export default function Signals() {
-  const [signals, setSignals] = useState<Signal[]>([]);
+  const [signals, setSignals] = useState<SignalListItem[]>([]);
   const [markets, setMarkets] = useState<MarketSummary[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -22,9 +22,13 @@ export default function Signals() {
 
   const load = useCallback(async () => {
     try {
-      const [sigRes, stateRes] = await Promise.all([fetch('/api/signals'), fetch('/api/state')]);
+      const [sigRes, stateRes] = await Promise.all([
+        fetch('/api/signals'),
+        fetch('/api/state'),
+      ]);
       const sigs = await sigRes.json();
-      if (!sigRes.ok) throw new Error(sigs.error ?? 'Could not load saved ideas');
+      if (!sigRes.ok)
+        throw new Error(sigs.error ?? 'Could not load saved ideas');
       setSignals(sigs);
 
       const state = await stateRes.json();
@@ -53,7 +57,10 @@ export default function Signals() {
       const data = await res.json();
 
       if (!res.ok) {
-        setNotice({ ok: false, text: data.hint ? `${data.error} — ${data.hint}` : data.error });
+        setNotice({
+          ok: false,
+          text: data.hint ? `${data.error} — ${data.hint}` : data.error,
+        });
       } else {
         const exits = data.exitsSet
           ? ` It closes itself at ${money(data.takeProfitPrice)} to win, or ${money(
@@ -72,52 +79,73 @@ export default function Signals() {
         });
       }
     } catch (e) {
-      setNotice({ ok: false, text: e instanceof Error ? e.message : String(e) });
+      setNotice({
+        ok: false,
+        text: e instanceof Error ? e.message : String(e),
+      });
     } finally {
       setCopyingId(null);
     }
   }
 
+  const active = signals.filter((s) => !s.expired);
+  const expired = signals.filter((s) => s.expired);
+
   return (
-    <main className="mx-auto max-w-[1120px] px-5 pt-6 pb-16">
-      <Link className="mb-3 inline-block text-sm text-accent hover:underline" href="/">
+    <main className='mx-auto max-w-7xl px-5 pt-6 pb-16'>
+      <Link
+        className='mb-3 inline-block text-sm text-accent hover:underline'
+        href='/'
+      >
         ← Back to trading
       </Link>
-      <h1 className="text-[26px] font-bold tracking-tight">Trade ideas</h1>
-      <p className="mt-1 text-sm text-muted">Post an idea, or copy someone else&apos;s with one click.</p>
+      <h1 className='text-[26px] font-bold tracking-tight'>Trade ideas</h1>
+      <p className='mt-1 text-sm text-muted'>
+        Post an idea, or copy someone else&apos;s with one click.
+      </p>
 
       {loadError && (
-        <div className="mb-4 rounded-xl border border-down bg-down-soft px-3.5 py-3 text-sm text-down" role="alert">
+        <div
+          className='mb-4 rounded-xl border border-down bg-down-soft px-3.5 py-3 text-sm text-down'
+          role='alert'
+        >
           {loadError}
         </div>
       )}
 
-      <div className="mt-4 lg:grid lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)] lg:items-start lg:gap-5">
-        <div className="lg:sticky lg:top-6">
+      <div className='mt-4 lg:grid lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)] lg:items-start lg:gap-5'>
+        <div className='lg:sticky lg:top-6'>
           <SignalForm markets={markets} onPosted={load} />
 
           <Notice notice={notice} />
 
-          <Card title="Copy with">
-            <AmountPicker value={copyAmount} onChange={setCopyAmount} showCustom={false} />
+          <Card title='Copy with'>
+            <AmountPicker
+              value={copyAmount}
+              onChange={setCopyAmount}
+              showCustom={false}
+            />
           </Card>
         </div>
 
         <div>
-          <h2 className="mt-2 mb-3 text-[17px] font-semibold lg:mt-0">
-            Every idea posted ({signals.length})
-          </h2>
-          {!signals.length && <p className="text-sm text-muted">Nothing posted yet.</p>}
+          <SignalSection
+            title="Active signals"
+            empty="No ideas are live right now."
+            signals={active}
+            copyAmount={copyAmount}
+            copyingId={copyingId}
+            onCopy={copy}
+          />
 
-          {signals.map((s) => (
-            <SignalCard
-              key={s.id}
-              signal={s}
-              copyAmount={copyAmount}
-              copying={copyingId === s.id}
-              onCopy={copy}
-            />
-          ))}
+          <SignalSection
+            title="Expired signals"
+            empty="Nothing has expired yet."
+            signals={expired}
+            copyAmount={copyAmount}
+            copyingId={copyingId}
+            onCopy={copy}
+          />
         </div>
       </div>
     </main>

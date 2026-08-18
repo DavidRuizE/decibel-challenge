@@ -1,7 +1,7 @@
 'use client';
 
 import { friendly, money } from '@/lib/format';
-import { Signal } from '@/lib/types';
+import { SignalListItem } from '@/lib/types';
 import Card from './Card';
 import { BADGE, BIG_BUTTON, TINY } from './ui';
 import SignalChart from './SignalChart';
@@ -12,12 +12,12 @@ export default function SignalCard({
   copying,
   onCopy,
 }: {
-  signal: Signal;
+  signal: SignalListItem;
   copyAmount: number;
   copying: boolean;
   onCopy: (id: string) => void;
 }) {
-  const expired = new Date(signal.expiresAt) < new Date();
+  const { expired } = signal;
   const asset = friendly(signal.marketName);
 
   return (
@@ -49,6 +49,7 @@ export default function SignalCard({
         takeProfit={signal.takeProfitPrice}
         stopLoss={signal.stopLossPrice}
         isBuy={signal.isBuy}
+        postedAt={signal.createdAt}
       />
 
       <button

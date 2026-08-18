@@ -18,12 +18,14 @@ export default function SignalChart({
   takeProfit,
   stopLoss,
   isBuy,
+  postedAt,
 }: {
   marketName: string;
   entry: number;
   takeProfit: number;
   stopLoss: number;
   isBuy: boolean;
+  postedAt: string;
 }) {
   const [candles, setCandles] = useState<Candle[] | null>(null);
   const [failed, setFailed] = useState(false);
@@ -33,7 +35,7 @@ export default function SignalChart({
     void (async () => {
       try {
         const res = await fetch(
-          `/api/candles?market=${encodeURIComponent(marketName)}`,
+          `/api/candles?market=${encodeURIComponent(marketName)}&from=${Date.parse(postedAt)}`,
         );
         const data = await res.json();
         if (!alive) return;
@@ -46,7 +48,7 @@ export default function SignalChart({
     return () => {
       alive = false;
     };
-  }, [marketName]);
+  }, [marketName, postedAt]);
 
   if (failed) {
     return (
@@ -104,7 +106,7 @@ export default function SignalChart({
         fill='var(--muted)'
         textAnchor='end'
       >
-        {marketName} · last 24h · {isBuy ? 'up bet' : 'down bet'}
+        {marketName} - since posted - {isBuy ? 'up bet' : 'down bet'}
       </text>
 
       {levels.map((l) => (

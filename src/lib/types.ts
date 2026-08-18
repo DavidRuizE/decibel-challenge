@@ -59,6 +59,8 @@ export type Signal = {
   expiresAt: string;
 };
 
+export type SignalListItem = Signal & { expired: boolean };
+
 export type SignalDraft = {
   author: string;
   marketName: string;
