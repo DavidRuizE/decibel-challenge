@@ -35,13 +35,12 @@ export async function approvedMaxFeeBps(): Promise<number | null>{
   return raw === undefined ? null : Number(raw) / BPS_SCALE;
 }
 
-export async function ensureBuilderApproved(feeBps = MAX_FEE_BPS) {
+export async function ensureBuilderApproved(feeBps = MAX_FEE_BPS): Promise<number> {
   const current = await approvedMaxFeeBps();
-  if (current !== null && current >= feeBps) {
-    return { approvedNow: false, maxFeeBps: current };
-  }
-  const tx = await approveBuilder(feeBps);
-  return { approvedNow: true, maxFeeBps: feeBps, transactionHash: tx.hash };
+  if (current !== null && current >= feeBps) return current;
+
+  await approveBuilder(feeBps);
+  return (await approvedMaxFeeBps()) ?? 0;
 }
 
 export async function approveBuilder(maxFee = MAX_FEE_BPS) {
@@ -71,8 +70,8 @@ export async function placeOrder({
     builderFee = MAX_FEE_BPS,
     isReduceOnly = false
 } : placesArgs) {
-    assertFeeWithinBound(builderFee, MAX_FEE_BPS);
-    await ensureBuilderApproved(builderFee);
+    const approvedMax = await ensureBuilderApproved(builderFee);
+    assertFeeWithinBound(builderFee, approvedMax);
 
     return decibelWrite.placeOrder({
         marketName: market.market_name,

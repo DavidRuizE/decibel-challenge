@@ -1,14 +1,18 @@
+import { UserError } from './errors';
+
 export function padAddress(addr: string): string {
     return '0x' + addr.replace(/^0x/, '').padStart(64, '0');
 }
 
 export function assertFeeWithinBound(builderFee: number, maxFee: number): void {
-    if ( !Number.isFinite || builderFee < 0){
-        throw new Error(`Invalid Builder fee: ${builderFee}`);
-    }
-    if (builderFee > maxFee){
-        throw new Error(`Builder fee ${builderFee} bps exceeds the approved maximum of ${maxFee} bps`);
-    }
+  if (!Number.isFinite(builderFee) || builderFee < 0) {
+    throw new Error(`Invalid builder fee: ${builderFee}`);
+  }
+  if (builderFee > maxFee){
+    throw new Error(
+      `Builder fee ${builderFee} bps exceeds the approved maximum of ${maxFee} bps`,
+    );
+  }
 }
 
 export function assertAffordable(
@@ -17,7 +21,7 @@ export function assertAffordable(
     maxLeverage: number,
 ): void {
   if (!Number.isFinite(equityUsd) || equityUsd <= 0) {
-    throw new Error('Your account has no money to bet with');
+    throw new UserError('Your account has no money to bet with');
   }
   const maxNotional = equityUsd * maxLeverage;
   if (notionalUsd > maxNotional) {
@@ -26,7 +30,7 @@ export function assertAffordable(
       currency: 'USD',
       maximumFractionDigits: 2,
     });
-    throw new Error(`That bet is too big for your balance — the most you can bet here is ${cap}`);
+    throw new UserError(`That bet is too big for your balance — the most you can bet here is ${cap}`);
   }
 }
 
