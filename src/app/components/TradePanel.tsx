@@ -56,7 +56,7 @@ export default function TradePanel({
           ok: true,
           text: waitForPrice
             ? `Saved — nothing has happened yet. This starts only if ${asset} reaches ${money(data.price)}, and until then you can cancel it below.`
-            : `Done — ${money(data.costUsd)} betting ${asset} goes ${isUp ? 'up' : 'down'}.${raised} It stays open until you close it or set automatic exits below.`,
+            : `Done — ${money(data.costUsd)} betting ${asset} goes ${isUp ? 'up' : 'down'}.${raised}.`,
         });
       }
       onPlaced();
