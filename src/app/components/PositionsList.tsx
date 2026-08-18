@@ -5,7 +5,7 @@ import { MUTED } from './ui';
 
 export default function PositionsList({ positions }: { positions: Position[] | undefined }) {
   return (
-    <Card title="Your open bets">
+    <Card title="Your open positions">
       {!positions?.length && (
         <p className={MUTED}>Nothing open yet. Make your first bet above.</p>
       )}

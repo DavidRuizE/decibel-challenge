@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { friendly, money } from '@/lib/format';
+import { coinAmount, friendly, money } from '@/lib/format';
 import type { MarketSummary } from '@/lib/types';
 import AmountPicker from './AmountPicker';
 import Card from './Card';
@@ -91,8 +91,13 @@ export default function TradePanel({
       <span className={STEP_LABEL}>2. Which way do you think it goes?</span>
       <DirectionPicker isUp={isUp} onChange={setIsUp} assetName={asset} />
 
-      <span className={STEP_LABEL}>3. How much do you want to risk?</span>
+      <span className={STEP_LABEL}>3. How many dollars do you want to put in?</span>
       <AmountPicker value={dollars} onChange={setDollars} />
+      <p className={`mt-1.5 ${TINY}`}>
+        {price
+          ? `That buys about ${coinAmount(dollars / price)} ${asset} at today's price.`
+          : 'Loading price…'}
+      </p>
 
       <span className={STEP_LABEL}>4. When?</span>
       <div className="flex gap-2">

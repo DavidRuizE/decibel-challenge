@@ -43,8 +43,9 @@ export default function Home() {
 
   return (
     <main className='mx-auto max-w-6xl px-5 pt-6 text-center'>
-      <h1>Trade, but simpler</h1>
-      <p>Practice money, trades on Aptos testnet.</p>
+
+      <h1 className="text-3xl font-bold tracking-tight">Trade, but simpler</h1>
+      <p className="mt-1 text-sm text-muted">Practice money, trades on Aptos testnet.</p>
       <br />
 
       <Link className="my-3 inline-block text-sm text-accent hover:underline" href="/signals">
@@ -62,12 +63,7 @@ export default function Home() {
 
       <div className='lg:grid lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)] lg:items:start lg:gap-5'>
         <div className='lg:sticky lg:top-6'>
-          <BalanceCard
-            equity={state?.equity}
-            unrealizedPnl={state?.unrealizedPnl}
-            availableToTrade={state?.availableToTrade}
-            heldAsMargin={state?.heldAsMargin}
-          />
+          <BalanceCard state={state}/>
           <TradePanel markets={state?.markets ?? []} onPlaced={refresh} />
         </div>
         <div>

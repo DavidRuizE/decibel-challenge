@@ -26,7 +26,9 @@ export type OpenOrder = {
 
 export type AppState = {
   equity: number;
+  balance: number;
   unrealizedPnl: number;
+  fundingCost: number;
   availableToTrade: number;
   heldAsMargin: number;
   markets: MarketSummary[];

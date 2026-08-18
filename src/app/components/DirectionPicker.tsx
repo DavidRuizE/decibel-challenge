@@ -45,8 +45,7 @@ export default function DirectionPicker({
         ) : (
           <>
             You win if <strong>{asset}</strong> goes <strong>down</strong>, and lose if it goes
-            up. You don&apos;t need to own any {asset} — this opens a short, funded by your
-            dollars, and you can lose more than a down bet feels like if the price climbs.
+            up.
           </>
         )}
       </p>

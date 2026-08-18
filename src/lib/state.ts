@@ -21,7 +21,9 @@ export function buildAccountState({
 
     return {
         equity: overview.perp_equity_balance,
+        balance: overview.total_margin,
         unrealizedPnl: overview.unrealized_pnl,
+        fundingCost: overview.unrealized_funding_cost,
         availableToTrade,
         heldAsMargin: overview.perp_equity_balance - availableToTrade,
         markets: toTradableMarkets(markets, priceByAddr),
@@ -57,7 +59,7 @@ function toTradableMarkets(
 
 function triggerPrice(o: UserOpenOrder): number {
   const match = /[\d.]+/.exec(o.trigger_condition ?? '');
-  return match ? Number(match[0]) : Number(o.price);
+  return match ? Number(match[0]) : (o.price ?? 0);
 }
 
 function enrichPositions(
@@ -75,8 +77,8 @@ function enrichPositions(
     .map((p) => {
       const market = marketByAddr.get(p.market);
       const markPx = priceByAddr.get(p.market)?.mark_px ?? null;
-      const size = Number(p.size);
-      const entry = Number(p.entry_price);
+      const size = p.size;
+      const entry = p.entry_price;
       const pnl = markPx === null ? null : (markPx - entry) * size;
       return {
         marketName: market?.market_name ?? p.market,
@@ -85,7 +87,7 @@ function enrichPositions(
         entryPrice: entry,
         markPrice: markPx,
         pnl,
-        leverage: Number(p.user_leverage),
+        leverage: p.user_leverage,
         takeProfitPrice: exitFor(exitOrders, p.market, 'tp'),
         stopLossPrice: exitFor(exitOrders, p.market, 'sl'),
       };
@@ -99,10 +101,10 @@ function toWaitingOrders(
   return [...waitingOrders]
     .sort((a, b) => String(a.order_id).localeCompare(String(b.order_id)))
     .map((o) => ({
-      orderId: String(o.order_id),
+      orderId: o.order_id,
       marketName: marketByAddr.get(o.market)?.market_name ?? o.market,
       isBuy: Boolean(o.is_buy),
-      price: Number(o.price),
-      size: Number(o.remaining_size),
+      price: o.price ?? 0,
+      size: o.remaining_size ?? 0,
     }));
 }

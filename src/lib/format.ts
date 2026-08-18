@@ -23,3 +23,6 @@ export const signedMoney = (n: number) => `${n >= 0 ? '+' : '−'}${money(Math.a
 export const directionWord = (isLong: boolean) => (isLong ? 'Up' : 'Down');
 export const directionSentence = (isLong: boolean) =>
   isLong ? 'profits if the price rises' : 'profits if the price falls';
+
+export const coinAmount = (n: number) =>
+  n.toLocaleString('en-US', { maximumSignificantDigits: 3 });
