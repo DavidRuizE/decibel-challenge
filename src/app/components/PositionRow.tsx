@@ -6,7 +6,7 @@ export default function PositionRow({ position: p }: { position: Position }) {
   const asset = friendly(p.marketName);
 
   return (
-    <div className="border-b border-line py-3.5 last:border-b-0">
+    <div className="border-b border-line py-3.5 last:border-b-0 text-start min-w-2xl">
       <div className="flex justify-between gap-3">
         <div>
           <div className="font-semibold">

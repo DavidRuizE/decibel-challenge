@@ -95,7 +95,7 @@ export default function TradePanel({
       <AmountPicker value={dollars} onChange={setDollars} />
       <p className={`mt-1.5 ${TINY}`}>
         {price
-          ? `That buys about ${coinAmount(dollars / price)} ${asset} at today's price.`
+          ? `Opens a ~${coinAmount(dollars / price)} ${asset} position at today's price.`
           : 'Loading price…'}
       </p>
 

@@ -42,7 +42,7 @@ export default function Home() {
   }
 
   return (
-    <main className='mx-auto max-w-6xl px-5 pt-6 text-center'>
+    <main className='mx-auto max-w-7xl px-5 pt-6 text-center'>
 
       <h1 className="text-3xl font-bold tracking-tight">Trade, but simpler</h1>
       <p className="mt-1 text-sm text-muted">Practice money, trades on Aptos testnet.</p>

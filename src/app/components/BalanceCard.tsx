@@ -63,12 +63,6 @@ export default function BalanceCard({ state }: { state: AppState | null }) {
           <>Nothing is tied up in open bets right now.</>
         )}
       </div>
-
-      <p className={`mt-2 ${TINY}`}>
-        Balance is money that is definitely yours. Equity adds what your open
-        bets are worth today, which changes every second and is not yours until
-        they close.
-      </p>
     </Card>
   );
 }
