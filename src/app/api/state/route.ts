@@ -3,6 +3,7 @@ import { SUBACCOUNT } from '@/lib/orders';
 import { buildAccountState } from '@/lib/state';
 import { NextResponse } from 'next/server';
 
+const PAGE_LIMIT = 100;
 
 export async function GET(){
     try{
@@ -10,8 +11,8 @@ export async function GET(){
             decibelRead.markets.getAll(),
             decibelRead.marketPrices.getAll(),
             decibelRead.accountOverview.getByAddr({ subAddr: SUBACCOUNT}),
-            decibelRead.userPositions.getByAddr({ subAddr: SUBACCOUNT}),
-            decibelRead.userOpenOrders.getByAddr({ subAddr: SUBACCOUNT}),
+            decibelRead.userPositions.getByAddr({ subAddr: SUBACCOUNT, limit: PAGE_LIMIT }),
+            decibelRead.userOpenOrders.getByAddr({ subAddr: SUBACCOUNT, limit: PAGE_LIMIT }),
         ])
         return NextResponse.json(
             buildAccountState({
