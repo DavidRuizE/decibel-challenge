@@ -41,3 +41,28 @@ export type AccountStateInputs = {
   positions: UserPosition[],
   openOrders: UserOpenOrdersResponse,
 }
+
+export type Signal = {
+  id: string;
+  author: string;
+  marketName: string;
+  isBuy: boolean;
+  entryPrice: number;
+  takeProfitPct: number;
+  stopLossPct: number;
+  holdHours: number;
+  takeProfitPrice: number;
+  stopLossPrice: number;
+  createdAt: string;
+  expiresAt: string;
+};
+
+export type SignalDraft = {
+  author: string;
+  marketName: string;
+  isBuy: boolean;
+  entryPrice: number;
+  takeProfitPct: number;
+  stopLossPct: number;
+  holdHours: number;
+};

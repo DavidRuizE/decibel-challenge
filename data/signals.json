@@ -1,0 +1,72 @@
+[
+  {
+    "id": "sig_e57a86bc",
+    "author": "TESLA",
+    "marketName": "TSLA/USD",
+    "isBuy": false,
+    "entryPrice": 337.61,
+    "takeProfitPct": 3,
+    "stopLossPct": 2,
+    "holdHours": 4,
+    "takeProfitPrice": 327.4817,
+    "stopLossPrice": 344.36220000000003,
+    "createdAt": "2026-08-18T02:29:44.616Z",
+    "expiresAt": "2026-08-18T06:29:44.616Z"
+  },
+  {
+    "id": "sig_2ac30829",
+    "author": "Signal Test",
+    "marketName": "BTC/USD",
+    "isBuy": true,
+    "entryPrice": 64280,
+    "takeProfitPct": 2,
+    "stopLossPct": 2,
+    "holdHours": 10,
+    "takeProfitPrice": 65565.6,
+    "stopLossPrice": 62994.4,
+    "createdAt": "2026-08-18T01:34:11.538Z",
+    "expiresAt": "2026-08-18T11:34:11.538Z"
+  },
+  {
+    "id": "sig_c8fcd81a",
+    "author": "check",
+    "marketName": "BTC/USD",
+    "isBuy": true,
+    "entryPrice": 64444,
+    "takeProfitPct": 3,
+    "stopLossPct": 2,
+    "holdHours": 4,
+    "takeProfitPrice": 66377.32,
+    "stopLossPrice": 63155.119999999995,
+    "createdAt": "2026-08-18T00:02:27.733Z",
+    "expiresAt": "2026-08-18T04:02:27.733Z"
+  },
+  {
+    "id": "sig_26069491",
+    "author": "David",
+    "marketName": "BTC/USD",
+    "isBuy": true,
+    "entryPrice": 62960,
+    "takeProfitPct": 3,
+    "stopLossPct": 2,
+    "holdHours": 48,
+    "takeProfitPrice": 64848.8,
+    "stopLossPrice": 61700.799999999996,
+    "createdAt": "2026-08-16T21:38:37.629Z",
+    "expiresAt": "2026-08-18T21:38:37.629Z"
+  },
+  {
+    "id": "sig_36dd9dd2",
+    "author": "demo",
+    "marketName": "BTC/USD",
+    "isBuy": true,
+    "entryPrice": 63139,
+    "takeProfitPct": 3,
+    "stopLossPct": 2,
+    "holdHours": 4,
+    "takeProfitPrice": 65033.17,
+    "stopLossPrice": 61876.22,
+    "createdAt": "2026-08-16T17:22:05.642Z",
+    "expiresAt": "2026-08-16T21:22:05.642Z"
+  }
+]
