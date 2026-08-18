@@ -4,6 +4,13 @@ A deliberately plain trading app on Decibel, **Aptos testnet only**, plus a
 copy-trade signal feature. Pick a market, pick a direction, pick a dollar
 amount, press one button — or copy somebody else's trade idea with one click.
 
+## Video
+https://drive.google.com/file/d/1U2ZSDKtDvgf_bWcOUjo75lokutSW3pKt/view?usp=sharing
+
+## App Live
+https://decibel-challenge-misc34zmy-david-ruizs-projects-5158fd46.vercel.app/
+It's not going to persist the signals on live due to the json file, but in the video is evidence of the correct behavior 
+
 ## Run it
 
 ```bash
