@@ -74,10 +74,6 @@ believing they were selling holdings.
 the snap happens there. `Math.round` throughout — `0.29 * 1e6` is
 `289999.99999999994`, and flooring loses a tick.
 
-**Orders report what filled, not what was asked for.** An immediate-or-cancel
-order fills what the book covers and cancels the rest, so the app reads the
-fills back and says the full amount, part of it, or nothing.
-
 **Hand-rolled SVG chart.** A price line plus three horizontal rules did not
 justify a charting dependency.
 
@@ -148,8 +144,9 @@ So the guard is structural rather than a convention: `lib/decibel.ts`,
 runtime. I verified it by deliberately importing the signing account into a
 component — the build stopped with *"You're importing a module that depends on
 server-only"* rather than producing a bundle. No variable is named
-`NEXT_PUBLIC_*` (the only way Next inlines an env var into client code), `.env.local`
-is gitignored, and a search of the built client chunks, the served HTML and every
-commit finds zero occurrences of either secret — with a positive control
-confirming the same search does find them in `.env.local`.
+`NEXT_PUBLIC_*` (the only way Next inlines an env var into client code), every
+`.env*` variant is gitignored except the placeholder template, and a search of
+the built client chunks, the served HTML and every commit finds zero occurrences
+of either secret — with a positive control confirming the same search does find
+them in `.env.local`.
 
