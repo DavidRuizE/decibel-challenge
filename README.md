@@ -9,7 +9,7 @@ https://drive.google.com/file/d/1U2ZSDKtDvgf_bWcOUjo75lokutSW3pKt/view?usp=shari
 
 ## App Live
 https://decibel-challenge-misc34zmy-david-ruizs-projects-5158fd46.vercel.app/
-It's not going to persist the signals on live due to the json file, but in the video is evidence of the correct behavior 
+- It's not going to persist the signals on live due to the json file, but in the video is evidence of the correct behavior 
 
 ## Run it
 
